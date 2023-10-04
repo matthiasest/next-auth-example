@@ -3,9 +3,8 @@ import type { NextAuthOptions as NextAuthConfig } from "next-auth"
 import { getServerSession } from "next-auth"
 
 
-import AzureAD from "next-auth/providers/azure-ad"
+import AzureADProvider from "next-auth/providers/azure-ad"
 
-import Google from "next-auth/providers/google"
 
 // Read more at: https://next-auth.js.org/getting-started/typescript#module-augmentation
 declare module "next-auth/jwt" {
@@ -17,10 +16,15 @@ declare module "next-auth/jwt" {
 
 export const config = {
   providers: [
-   
-    AzureAD({ clientId: process.env.AUTH_AZUREAD_ID, clientSecret: process.env.AUTH_AZUREAD_SECRET }),
-   
-    Google({ clientId: process.env.AUTH_GOOGLE_ID, clientSecret: process.env.AUTH_GOOGLE_SECRET }),
+    AzureADProvider({
+      clientId: process.env.AZURE_AD_CLIENT_ID,
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+      tenantId: process.env.AZURE_AD_TENANT_ID,
+    }),
+  ]
+}
+
+
    
   ],
   callbacks: {
@@ -44,13 +48,10 @@ declare global {
       NEXTAUTH_SECRET: string
 
     
-      AUTH_AZUREAD_ID: string
-      AUTH_AZUREAD_SECRET: string
- 
-      AUTH_GOOGLE_ID: string
-      AUTH_GOOGLE_SECRET: string
-   
-   
+      AZURE_AD_CLIENT_ID: string
+      AZURE_AD_CLIENT_SECRET: string
+      AZURE_AD_TENANT_ID: string
+       
      
     }
   }
